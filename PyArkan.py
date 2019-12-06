@@ -1,6 +1,5 @@
+﻿#-*- coding: utf-8 -*-
 # Inintialization
-# import sys
-# import warnings
 import math
 import pygame as pg
 import random as rnd
@@ -19,7 +18,7 @@ display_width,display_height   = 800, 600
 screen_width  = display_width  - margin_left - margin_right
 screen_height = display_height - margin_top  - margin_bot
 window = pg.display.set_mode((display_width, display_height))
-pg.display.set_caption('BRICKS GAME')
+pg.display.set_caption('PyArkan')
 
 # Global vars
 lives_max = 3
@@ -54,7 +53,8 @@ class Sprite:
 	def render(self):
 		if self.alpha < 255:
 			self.bitmap.set_alpha(self.alpha)
-		screen.blit(pg.transform.scale(self.bitmap,(self.size.dx,self.size.dy)),(self.pos.dx,self.pos.dy))		
+		if self.visible:
+			screen.blit(pg.transform.scale(self.bitmap,(self.size.dx,self.size.dy)),(self.pos.dx,self.pos.dy))		
 	def move(self):
 		self.pos.dx += self.speed.dx
 		self.pos.dy += self.speed.dy
@@ -147,7 +147,15 @@ class Ball(Sprite):
 		self.mass = 1
 	def go(self):
 		self.speed.dy += gravity/10000
-		Sprite.go(self)
+		if (self.pos.dy + self.size.dy) >= screen_height:
+			if self.alpha>140:
+				self.alpha = 140
+			elif self.alpha==0:
+				self.visible = False
+			else:
+				self.alpha-=5
+		else:
+			Sprite.go(self)
 		
 class Desk(Sprite):
 	def __init__(self):
@@ -229,6 +237,11 @@ def DeskCollision(sa,sb):	# sa = ball, sb = desk
 			sa.mirrory()
 	elif ((sa.pos.dy + sa.size.dy) > sb.pos.dy and sa.pos.dy < (sb.pos.dy+sb.size.dx)):
 		sa.mirrorx()	
+def GetScoreLivesInfo(score):
+	score_txt = str(score)
+	while len(score_txt)<9:
+		score_txt = '0' + score_txt	
+	return "Lives: " + '®'*lives + ' ¤'*(lives_max - lives) +' || Score: ' + score_txt + ' || Bricks: ' + str(bricks_total)
 		
 # Create game surface
 screen = pg.Surface((screen_width, screen_height))
@@ -252,7 +265,7 @@ score, lives = 0, lives_max
 pg.key.set_repeat(1,1)
 done  = True
 # Create Game Maine Loop
-while done:
+while lives>0 and done:
 	# Proceed Events
 	for e in pg.event.get():
 		# Cycle events
@@ -300,13 +313,14 @@ while done:
 	desk.render()
 	desk.go()
 	ball.go()
+	if not ball.visible:
+		del ball
+		ball = Ball(desk.pos.dy)
+		desk.pos.dx = (screen_width-desk.size.dx)//2
+		lives-=1
 	# Show Information
-	score_txt = str(score)
-	while len(score_txt)<9:
-		score_txt = '0' + score_txt
-	lives_txt = "Lives: " + '@'*lives + ' '*(lives_max - lives) +' || Score: ' + score_txt + ' || Bricks: ' + str(bricks_total)
 	info_str.blit(
-		inf_font.render(lives_txt,1,(30,140,30)),
+		inf_font.render(GetScoreLivesInfo(score),1,(30,140,30)),
 		(2,2)
 	)
 	# Render Game Information Block
@@ -316,5 +330,27 @@ while done:
 	pg.display.flip()				# To refresh window. This row must be in the end of game cycle.
 	# Time delay
 	pg.time.delay(5)
+
+# Game over
+end_font = pg.font.SysFont("comicsansms", 72)
+end_text = end_font.render("GAME OVER",True,(230,50,50))
+alpha = 255
+while done:
+	for e in pg.event.get():
+		if e.type == pg.QUIT:
+			done = False
+		elif e.type == pg.KEYDOWN:
+			if e.key == pg.K_ESCAPE:
+				done = False
+	pg.time.delay(20)
+	info_str.blit(inf_font.render(GetScoreLivesInfo(score),1,(30,140,30)),(2,2))
+	window.blit(info_str,(margin_left,margin_bot))
+	window.blit(end_text,((screen_width//4, screen_height//2)))
+	if alpha > 0: alpha -= 2
+	screen.set_alpha(alpha)
+	window.blit(screen,(margin_left,margin_top))
+	pg.display.flip()
+	
+	
 pg.quit()
 quit()
