@@ -6,3 +6,7 @@ Arkanoid like game, written by Python
 
 * Python
 * PyGame
+
+## Links
+
+![PyArkane from pygame.org](https://www.pygame.org/project/4405)
