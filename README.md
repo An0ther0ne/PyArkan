@@ -9,4 +9,4 @@ Arkanoid like game, written by Python
 
 ## Links
 
-[PyArkane from pygame.org](https://www.pygame.org/project/4405)
+[PyArkan from pygame.org](https://www.pygame.org/project/4405)
