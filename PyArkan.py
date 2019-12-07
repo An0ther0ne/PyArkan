@@ -316,7 +316,9 @@ while lives>0 and done:
 	if not ball.visible:
 		del ball
 		ball = Ball(desk.pos.dy)
-		desk.pos.dx = (screen_width-desk.size.dx)//2
+		desk.pos.dx = margin_scr+int((screen_width-desk.size.dx)/2)
+		ball.fixed = True
+		desk.fixed = True
 		lives-=1
 	# Show Information
 	info_str.blit(
