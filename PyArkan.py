@@ -246,7 +246,8 @@ def GetScoreLivesInfo(score):
 # Create game surface
 screen = pg.Surface((screen_width, screen_height))
 # Fill game surface with gray
-screen.fill((50,50,50))
+#screen.fill((50,50,50))
+wall = pg.image.load("wall.png").convert()
 # Create block of information
 info_str = pg.Surface((screen_width, margin_top - margin_bot - 2))
 # Fill infoblock
@@ -286,7 +287,8 @@ while lives>0 and done:
 					desk.fixed = False
 				desk.speed.dx += desk_acseleration
 	# Clear game screen with gray
-	screen.fill((50,50,50))
+	# screen.fill((50,50,50))
+	screen.blit(pg.transform.scale(wall,(screen_width,screen_height)),(0,0))	
 	# Clear Information
 	info_str.fill((50,50,92))
 	# Render objects
