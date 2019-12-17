@@ -26,7 +26,7 @@ brick_columns, brick_rows  = 10,10
 bricks_total = brick_columns * brick_rows
 brick_width  = int((screen_width - 2*margin_scr)/brick_columns)
 brick_height = int(brick_width/4)
-ball_diameter, ball_speed  = 25,2
+ball_diameter, ball_speed  = 25,3
 desk_acseleration, desk_elasticity = 2, 0.5
 gravity = 9.82
 koef_elasticity_groud = 0.5
@@ -240,7 +240,7 @@ def DeskCollision(sa,sb):	# sa = ball, sb = desk
 def GetScoreLivesInfo(score):
 	score_txt = str(score)
 	while len(score_txt)<9:
-		score_txt = '0' + score_txt	
+		score_txt = '_' + score_txt	
 	return "Lives: " + '®'*lives + ' ¤'*(lives_max - lives) +' || Score: ' + score_txt + ' || Bricks: ' + str(bricks_total)
 		
 # Create game surface
