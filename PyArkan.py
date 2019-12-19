@@ -30,9 +30,23 @@ ball_diameter, ball_speed  = 25,3
 desk_acseleration, desk_elasticity = 2, 0.5
 gravity = 9.82
 koef_elasticity_groud = 0.5
+wallpapers = 2
 
 class Vector:
 	def __init__(self,dx,dy): self.dx,self.dy  = dx,dy
+
+class wallpaper:
+	def __init__(self, maxpages):
+		self.fname = "wall"+str(rnd.randrange(1,wallpapers+1))+".png"
+		self._wall = pg.image.load(self.fname).convert()
+	@property
+	def wall(self): 
+		return self._wall
+	@wall.setter 
+	def wall(self, w): 
+		self._wall = w
+	def blit(self, s, w, h):
+		s.blit(pg.transform.scale(self._wall,(w,h)),(0,0))
 
 # Greate a base game object
 class Sprite:
@@ -207,6 +221,7 @@ class Desk(Sprite):
 					self.speed.dx -= dx * self.elast
 				else:
 					self.size.dx += math.copysign(desk_acseleration,dx)
+	
 def Intersect(sa,sb):
 	if ((sa.pos.dx+sa.size.dx > sb.pos.dx) and 
 		(sa.pos.dx < sb.pos.dx+sb.size.dx) and 
@@ -247,7 +262,7 @@ def GetScoreLivesInfo(score):
 screen = pg.Surface((screen_width, screen_height))
 # Fill game surface with gray
 #screen.fill((50,50,50))
-wall = pg.image.load("wall.png").convert()
+wall = wallpaper(wallpapers)
 # Create block of information
 info_str = pg.Surface((screen_width, margin_top - margin_bot - 2))
 # Fill infoblock
@@ -288,7 +303,7 @@ while lives>0 and done:
 				desk.speed.dx += desk_acseleration
 	# Clear game screen with gray
 	# screen.fill((50,50,50))
-	screen.blit(pg.transform.scale(wall,(screen_width,screen_height)),(0,0))	
+	wall.blit(screen, screen_width, screen_height)
 	# Clear Information
 	info_str.fill((50,50,92))
 	# Render objects
