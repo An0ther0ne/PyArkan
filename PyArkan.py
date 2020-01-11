@@ -48,7 +48,7 @@ class wallpaper:
 	def blit(self, s, w, h):
 		s.blit(pg.transform.scale(self._wall,(w,h)),(0,0))
 
-# Greate a base game object
+# Base game object class
 class Sprite:
 	def __init__(self,pos,speed):
 		# Initialisations
@@ -252,6 +252,7 @@ def DeskCollision(sa,sb):	# sa = ball, sb = desk
 			sa.mirrory()
 	elif ((sa.pos.dy + sa.size.dy) > sb.pos.dy and sa.pos.dy < (sb.pos.dy+sb.size.dx)):
 		sa.mirrorx()	
+
 def GetScoreLivesInfo(score):
 	score_txt = str(score)
 	while len(score_txt)<9:
@@ -260,8 +261,6 @@ def GetScoreLivesInfo(score):
 		
 # Create game surface
 screen = pg.Surface((screen_width, screen_height))
-# Fill game surface with gray
-#screen.fill((50,50,50))
 wall = wallpaper(wallpapers)
 # Create block of information
 info_str = pg.Surface((screen_width, margin_top - margin_bot - 2))
@@ -280,7 +279,7 @@ ball = Ball(desk.pos.dy)
 score, lives = 0, lives_max
 pg.key.set_repeat(1,1)
 done  = True
-# Create Game Maine Loop
+# Create Game Main Loop
 while lives>0 and done:
 	# Proceed Events
 	for e in pg.event.get():
@@ -301,8 +300,6 @@ while lives>0 and done:
 				if desk.fixed and not ball.fixed:
 					desk.fixed = False
 				desk.speed.dx += desk_acseleration
-	# Clear game screen with gray
-	# screen.fill((50,50,50))
 	wall.blit(screen, screen_width, screen_height)
 	# Clear Information
 	info_str.fill((50,50,92))
@@ -369,7 +366,6 @@ while done:
 	screen.set_alpha(alpha)
 	window.blit(screen,(margin_left,margin_top))
 	pg.display.flip()
-	
 	
 pg.quit()
 quit()
