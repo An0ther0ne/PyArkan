@@ -5,8 +5,8 @@ Arkanoid like game, written by Python
 
 To start press Space Bar.
 Other controll keys are simple: 
-Left or A  – move left
-Right or D – move right
+Left or A  â€“ move left
+Right or D â€“ move right
 
 ## Requirements
 
@@ -16,3 +16,7 @@ Right or D – move right
 ## Links
 
 [PyArkan from pygame.org](https://www.pygame.org/project/4405)
+
+# AUTHOR
+   An0ther0ne
+   
